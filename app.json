@@ -9,6 +9,9 @@
     "icon": "https://tylermcginnis.com/udacifitness-512.png",
     "notification": {
       "icon": "https://tylermcginnis.com/udacifitness-45.png"
+    },
+    "android": {
+      "package": "com.hussamadin.udacicards"
     }
   }
 }
