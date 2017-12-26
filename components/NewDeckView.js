@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { purple, white } from '../utils/colors';
+
 import {
 	View,
 	Text,
@@ -8,7 +8,9 @@ import {
 	Platform,
 	StyleSheet
 } from 'react-native';
-
+import { saveDeckTitle } from '../utils/api';
+import { NavigationActions } from 'react-navigation';
+import CustomButton from './CustomButton'
 function SubmitBtn({ onPress }) {
 	return (
 		<TouchableOpacity
@@ -22,25 +24,48 @@ function SubmitBtn({ onPress }) {
 	);
 }
 
+
+
 class NewDeckView extends Component {
-	submit = () => {
-		//	this.setState(() => ({ text: '' }));
-		console.log('submitesd');
-		this.toHome();
+	state = {
+		title: ''
 	};
 
-	toHome = () => {
-		this.props.navigation.navigate('NewCardView');
+
+	submit = () => {
+
+		if (this.state.title === '') {
+			alert("Please add a Deck Title");
+			return;
+		}
+
+		saveDeckTitle(this.state.title);
+		this.props.navigation.navigate('DeckView', {
+			deckTitle: this.state.title,
+
+		});
+		this.setState(() => ({ title: '' }));
+
 	};
+
+
+
 	render() {
 		return (
-			<View>
-				<Text>What is the title of your new Deck?</Text>
+			<View style={styles.container}>
+
+				<Text style={styles.text}>What is the title of your new Deck?</Text>
 				<TextInput
-					style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+
+					style={styles.textInput}
+					onChangeText={title => this.setState({ title })}
+					value={this.state.title}
 				/>
 
-				<SubmitBtn onPress={this.submit} />
+
+				<CustomButton onPress={this.submit} backgroundColor={'#292477'} text={'Submit'} color={'white'} />
+
+
 			</View>
 		);
 	}
@@ -49,45 +74,39 @@ class NewDeckView extends Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		padding: 20,
-		backgroundColor: white
+		backgroundColor: '#fff',
+		margin: 10,
+		marginTop: 100,
+		marginBottom: 100,
+		borderWidth: 1,
+		borderColor: 'lightgrey',
+		borderRadius: 10,
+		padding: 10,
+		justifyContent: 'space-between',
+		alignItems: 'center',
 	},
 	row: {
-		flexDirection: 'row',
 		flex: 1,
-		alignItems: 'center'
 	},
-	iosSubmitBtn: {
-		backgroundColor: purple,
-		padding: 10,
-		borderRadius: 7,
-		height: 45,
-		marginLeft: 40,
-		marginRight: 40
+
+	text: {
+		textAlign: 'center',
+		fontSize: 30,
+		fontWeight: 'bold',
+		color: '#14146F',
+		fontFamily: 'sans-serif',
+		paddingTop: 15,
+		alignSelf: 'flex-start'
 	},
-	AndroidSubmitBtn: {
-		backgroundColor: purple,
-		padding: 10,
-		paddingLeft: 30,
-		paddingRight: 30,
-		height: 45,
-		borderRadius: 2,
-		alignSelf: 'flex-end',
-		justifyContent: 'center',
-		alignItems: 'center'
+	textInput: {
+		fontSize: 30,
+		color: '#222246',
+		fontFamily: 'sans-serif',
+		alignSelf: 'stretch',
+
 	},
-	submitBtnText: {
-		color: white,
-		fontSize: 22,
-		textAlign: 'center'
-	},
-	center: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		marginLeft: 30,
-		marginRight: 30
-	}
+
+
 });
 
 export default NewDeckView;

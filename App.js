@@ -5,8 +5,12 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import DeckListView from './components/DeckListView';
 import NewDeckView from './components/NewDeckView';
 import NewCardView from './components/NewCardView';
+import DeckView from './components/DeckView';
+import QuizView from './components/QuizView';
 import { purple, white } from './utils/colors';
 import { Constants } from 'expo';
+
+import { setLocalNotification } from './utils/helpers'
 
 function UdaciStatusBar({ backgroundColor, ...props }) {
 	return (
@@ -61,6 +65,15 @@ const MainNavigator = StackNavigator({
 	Home: {
 		screen: Tabs
 	},
+	DeckView: {
+		screen: DeckView,
+		navigationOptions: {
+			headerTintColor: white,
+			headerStyle: {
+				backgroundColor: purple
+			}
+		}
+	},
 	NewCardView: {
 		screen: NewCardView,
 		navigationOptions: {
@@ -69,15 +82,54 @@ const MainNavigator = StackNavigator({
 				backgroundColor: purple
 			}
 		}
+	},
+	QuizView: {
+		screen: QuizView,
+		navigationOptions: {
+			headerTintColor: white,
+			headerStyle: {
+				backgroundColor: purple
+			}
+		}
 	}
 });
-
+function getCurrentRouteName(navigationState) {
+	if (!navigationState) {
+		return null;
+	}
+	const route = navigationState.routes[navigationState.index];
+	// dive into nested navigators
+	if (route.routes) {
+		return getCurrentRouteName(route);
+	}
+	return route.routeName;
+}
 export default class App extends React.Component {
+	state = { currentScreen: null }
+	async componentWillMount() {
+		await Expo.Font.loadAsync({
+			'Roboto': require('native-base/Fonts/Roboto.ttf'),
+			'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
+		});
+	}
+
+	componentDidMount() {
+		setLocalNotification();
+	}
 	render() {
 		return (
 			<View style={{ flex: 1 }}>
 				<UdaciStatusBar backgroundColor={purple} barStyle="light-content" />
-				<MainNavigator />
+				<MainNavigator onNavigationStateChange={(prevState, currentState) => {
+					const currentScreen = getCurrentRouteName(currentState);
+					const prevScreen = getCurrentRouteName(prevState);
+
+					if (prevScreen !== currentScreen) {
+
+						this.setState({ currentScreen: currentScreen });
+						this.setState({ prevScreen: prevScreen });
+					}
+				}} screenProps={{ currentScreen: this.state.currentScreen }} />
 			</View>
 		);
 	}
