@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { getDecks } from '../utils/api';
 import ListItem from './ListItem';
 import _ from 'lodash';
+import CustomButton from './CustomButton'
 class DeckListView extends Component {
 	_onPressItem = id => {
 		// updater functions are preferred for transactional updates
@@ -38,8 +39,11 @@ class DeckListView extends Component {
 			onPressItem={this._onPressItem}
 		/>
 	);
+	toNewDeckView = () => {
+		this.props.navigation.navigate('NewDeck');
+	}
 	render() {
-		if (this.state.data.length > 0) {
+		if (this.state.data) {
 			return (
 				<View style={styles.container}>
 					<FlatList
@@ -53,9 +57,12 @@ class DeckListView extends Component {
 		} else {
 			return (
 				<View style={styles.container}>
-					<Text>
-						No Decks were found!.
-				</Text>
+					<View style={styles.empty}>
+						<Text style={styles.text}>
+							No Decks were found :(
+						</Text>
+						<CustomButton onPress={this.toNewDeckView} backgroundColor={'#292477'} text={'Add New Deck'} color={'white'} />
+					</View>
 
 				</View>
 			);
@@ -67,7 +74,25 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
-
+	empty: {
+		flex: 1,
+		backgroundColor: '#fff',
+		margin: 10,
+		marginTop: 100,
+		marginBottom: 100,
+		borderWidth: 1,
+		borderColor: 'lightgrey',
+		borderRadius: 10,
+		padding: 10,
+		justifyContent: 'space-between',
+	},
+	text: {
+		textAlign: 'center',
+		fontSize: 40,
+		fontWeight: 'bold',
+		color: '#14146F',
+		fontFamily: 'sans-serif',
+	},
 
 });
 

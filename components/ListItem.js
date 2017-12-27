@@ -10,7 +10,6 @@ class ListItem extends Component {
 	}
 
 	_onPress = () => {
-		console.log('on Press');
 		this.props.onPressItem(this.props.id);
 	};
 

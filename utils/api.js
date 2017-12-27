@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native';
 
-const DECK_STORAGE_KEY = 'UdaciCards:decks';
+const DECK_STORAGE_KEY = 'UdaciCards:Decks';
 export function saveDeckTitle(deckTitle) {
 	//Save Deck Title
 	let deck = {
@@ -33,6 +33,8 @@ function formatDecksResults(results) {
 		let data = JSON.parse(results);
 
 		return Object.values(data);
+	} else {
+		return null;
 	}
 }
 

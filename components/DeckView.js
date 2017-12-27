@@ -47,7 +47,6 @@ class DeckView extends Component {
 	};
 	refresh() {
 		getDeck(this.state.deckTitle).then(deck => {
-			console.log(deck.questions.length);
 			this.setState({
 				questions: deck.questions
 			});

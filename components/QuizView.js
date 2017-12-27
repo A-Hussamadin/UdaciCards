@@ -184,7 +184,6 @@ class QuizView extends Component {
                         { rotateY: this.backInterpolate }
                     ]
                 }
-                console.log(this.state.cardfront)
                 if (this.state.cardfront) {
 
                     return (
